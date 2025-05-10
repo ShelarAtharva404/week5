@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+</head>
+<body>
+  <h1>Todo List</h1>
+  <ul id="todoList"></ul>
+
+  <h3>Add Todo</h3>
+  <input type="text" id="newTodo" placeholder="Enter new todo">
+  <button onclick="addTodo()">Add</button>
+
+  <script>
+    // Fetch todos from the API and display them
+    function fetchTodos() {
+      fetch('http://localhost:3000/todos')
+        .then(response => response.json())
+        .then(todos => {
+          const todoList = document.getElementById('todoList');
+          todoList.innerHTML = '';
+          todos.forEach(todo => {
+            const li = document.createElement('li');
+            li.textContent = todo.task;
+            todoList.appendChild(li);
+          });
+        });
+    }
+
+    // Add a new todo
+    function addTodo() {
+      const newTodoText = document.getElementById('newTodo').value;
+      fetch('http://localhost:3000/todos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ task: newTodoText }),
+      })
+        .then(response => response.json())
+        .then(() => {
+          fetchTodos();
+          document.getElementById('newTodo').value = '';
+        });
+    }
+
+    // Initial fetch
+    fetchTodos();
+  </script>
+</body>
+</html>

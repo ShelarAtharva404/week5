@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Todo App</title>
+</head>
+<body>
+  <h1>Add Todo</h1>
+  <form id="todoForm">
+    <input type="text" id="title" placeholder="Enter todo" required />
+    <button type="submit">Add Todo</button>
+  </form>
+
+  <script>
+    document.getElementById("todoForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("title").value;
+
+      const res = await fetch("http://localhost:3000/api/todos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ title })
+      });
+
+      const data = await res.json();
+      alert("Todo Added: " + data.title);
+    });
+  </script>
+</body>
+</html>
